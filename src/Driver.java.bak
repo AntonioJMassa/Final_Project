@@ -13,9 +13,6 @@ public class Driver {
 		makeMilkshake SOC2 = new makeMilkshake(milkshake);
 		waitress.setCommand(SOC2);
 		waitress.orderUp();
-		
-		waitress.setCommand(SOC);
-		waitress.orderUp();
 
 	}
 
