@@ -2,13 +2,13 @@
 FROM openjdk:11-jdk-slim
 
 # Set the working directory to /app
-WORKDIR /app
+WORKDIR /Command
 
 # Copy the current directory contents into the container at /app
-COPY D:\Users\Ichig\eclipse-workspace\HW2_Command\src /app
+COPY /Command
 
 # Compile the Java code
 RUN javac *.java
 
-# Set the entry point to the Driver class
-ENTRYPOINT ["java", "Driver"]
+# Set the default command to run when the container starts
+CMD ["java", "Driver"]
