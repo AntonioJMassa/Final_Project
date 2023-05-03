@@ -4,32 +4,22 @@ version: 2.1
 orbs:
   docker: circleci/docker@1.7.0
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  build-and-push:
-    # Specify the execution environment
+  build-and-deploy:
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
+      - image: antoniomassa83/finalproject:latest
     steps:
       - checkout
       - run:
-          name: "Build Docker image"
-          command: "docker build -t command ."
-      - run:
-          name: "Tag Docker image"
-          command: "docker tag command antoniomassa83/command:${CIRCLE_SHA1}"
-      - run:
-          name: "Login to Docker registry"
-          command: "echo $DOCKER_REGISTRY_PASSWORD | docker login -u $DOCKER_REGISTRY_USERNAME --password-stdin my-registry"
-      - run:
-          name: "Push Docker image"
-          command: "docker push antoniomassa83/finalproject:command"
+          name: Build and deploy app
+          command: |
+            ./gradlew build
+            ./gradlew bootJar
+            docker build -t antoniomassa83/finalproject:latest .
+            docker push antoniomassa83/finalproject:latest
 
-# Orchestrate jobs using workflows
-# See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  example-workflow:
+  build-and-deploy:
     jobs:
-      - build-and-push
+      - build-and-deploy
+
