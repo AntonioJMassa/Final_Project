@@ -7,7 +7,7 @@ orbs:
 jobs:
   build-and-deploy:
     docker:
-      - image: antoniomassa83/finalproject:latest
+      - image: antoniomassa83/finalproject:command
     steps:
       - checkout
       - run:
@@ -15,8 +15,8 @@ jobs:
           command: |
             ./gradlew build
             ./gradlew bootJar
-            docker build -t antoniomassa83/finalproject:latest .
-            docker push antoniomassa83/finalproject:latest
+            docker build -t antoniomassa83/finalproject:command .
+            docker push antoniomassa83/finalproject:command
 
 workflows:
   build-and-deploy:
