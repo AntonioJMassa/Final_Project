@@ -15,9 +15,14 @@ jobs:
             docker build -t antoniomassa83/finalproject:command .
             docker push antoniomassa83/finalproject:command
       - run:
-          name: Run Tests
+          name: Run JUnit Tests
           command: |
             docker run --rm antoniomassa83/finalproject:command sh -c "./gradlew test"
+      - store_test_results:
+          path: build/test-results
+      - store_artifacts:
+          path: ./build/test-results
+          destination: ./build/test-results
   deploy:
     docker:
       - image: cimg/openjdk:15.0
