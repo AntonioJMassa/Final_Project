@@ -19,18 +19,17 @@ jobs:
           command: "docker build -t command ."
       - run:
           name: "Tag Docker image"
-          command: "docker tag command my-registry/command:${CIRCLE_SHA1}"
+          command: "docker tag command antoniomassa83/command:${CIRCLE_SHA1}"
       - run:
           name: "Login to Docker registry"
           command: "echo $DOCKER_REGISTRY_PASSWORD | docker login -u $DOCKER_REGISTRY_USERNAME --password-stdin my-registry"
       - run:
           name: "Push Docker image"
-          command: "docker push my-registry/command:${CIRCLE_SHA1}"
+          command: "docker push antoniomassa83/finalproject:command"
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-    example-workflow:
-      jobs:
-        - docker/publish:
-            image: Command 
+  example-workflow:
+    jobs:
+      - build-and-push
