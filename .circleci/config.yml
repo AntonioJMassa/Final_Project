@@ -1,0 +1,45 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:latest
+    working_directory: /app
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t antoniomassa83/finalproject:command .
+            docker push antoniomassa83/finalproject:command
+      - run:
+          name: Run Tests
+          command: |
+            docker run --rm antoniomassa83/finalproject:command sh -c "./gradlew test"
+  deploy:
+    docker:
+      - image: cimg/openjdk:latest
+    working_directory: /app
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Production
+          command: |
+            docker pull antoniomassa83/finalproject:command
+            docker stop finalproject || true
+            docker rm finalproject || true
+            docker run -d --name finalproject -p 8080:8080 antoniomassa83/finalproject:command
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
