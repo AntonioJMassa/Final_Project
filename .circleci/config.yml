@@ -1,16 +1,20 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
+
 jobs:
   build:
     docker:
-      - image: docker:20.10.9
+      - image: docker:20.10.7
     steps:
       - checkout
       - run:
-          name: Build project with Docker
+          name: Build and Test
           command: |
-            docker build -t antoniomassa83/finalproject:command .
-            docker push antoniomassa83/finalproject:command
+            docker build -t antoniomassa83/finalproject .
+            docker run antoniomassa83/finalproject ./gradlew test
 
-
+workflows:
+  build-and-test:
+    jobs:
+      - build
